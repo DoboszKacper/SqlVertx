@@ -1,0 +1,83 @@
+swagger: "2.0"
+
+info:
+  version: 1.0.0
+  title: Simple Vertx-Docker-MySql
+  description: A simple API that connects to mysql database
+
+  contact:
+    name: Kacper
+    url: https://github.com/DoboszKacper
+    email: kacper_dobosz@onet.pl
+
+  license:
+    name: Kacper
+    url: https://github.com/DoboszKacper
+
+schemes:
+  - https
+host: localhost:3306
+basePath: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+paths:
+  /users:
+    get:
+      summary: Gets some Users
+      description: Returns a list containing all users. The list supports paging.
+      parameters:
+        - in: query
+          name: offset
+          type: integer
+          description: The number of items to skip before starting to collect the result set.
+        - in: query
+          name: limit
+          type: integer
+          description: The numbers of items to return.
+      responses:
+        200:
+          description: A list of Users
+          schema:
+            $ref: "#/definitions/User"
+  /users/{username}:
+    parameters:
+      - name: username
+        in: path
+        required: true
+        description: The person's username
+        type: string
+    post:
+      summary: Create a user
+      description: Creates a single user whith his username
+      responses:
+        200:
+          description: User Created
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: Failed to create a User
+    delete:
+      summary: Deletes a person
+      description: Delete a single person identified via its username
+      responses:
+        200:
+          description: User Deleted
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: The User does not exists.
+#Definitions
+definitions:
+  User:
+    required:
+      - username
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      phoneNumber:
+        type: string
+  Users:
+    type: array
+    items:
+      $ref: "#/definitions/User"
